@@ -15,6 +15,12 @@ func (self *BytecodeReader) ReadUint8() uint8 {
 	return i
 }
 
+func (self *BytecodeReader) ReadInt8() int8 {
+	i := int8(self.code[self.pc])
+	self.pc++
+	return i
+}
+
 func (self *BytecodeReader) ReadUint16() uint16 {
 	byte1 := uint16(self.ReadUint8())
 	byte2 := uint16(self.ReadUint8())
