@@ -3,7 +3,7 @@ package classfile
 type CodeAttribute struct {
 	cp             *ConstantPool
 	maxStack       uint16
-	maxLocale      uint16
+	maxLocals      uint16
 	code           []byte
 	exceptionTable []*ExceptionTableEntry
 	attributes     []AttributeInfo
@@ -18,7 +18,7 @@ type ExceptionTableEntry struct {
 
 func (self *CodeAttribute) readInfo(reader *ClassReader) {
 	self.maxStack = reader.readUint16()
-	self.maxLocale = reader.readUint16()
+	self.maxLocals = reader.readUint16()
 	codeLength := reader.readUint32()
 	self.code = reader.readBytes(codeLength)
 	self.exceptionTable = readExceptionTable(reader)
@@ -36,4 +36,18 @@ func readExceptionTable(reader *ClassReader) []*ExceptionTableEntry {
 			catchType: reader.readUint16()}
 	}
 	return exceptionTable
+}
+
+func (self *CodeAttribute) MaxStack() uint {
+	return uint(self.maxStack)
+}
+func (self *CodeAttribute) MaxLocals() uint {
+	return uint(self.maxLocals)
+}
+func (self *CodeAttribute) Code() []byte {
+	return self.code
+}
+
+func (self *CodeAttribute) ExceptionTable() []*ExceptionTableEntry {
+	return self.exceptionTable
 }

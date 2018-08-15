@@ -1,7 +1,11 @@
 package main
 
 import "fmt"
-import "github.com/lojian/jvmgo/ch05/rtda"
+import "strings"
+
+import "github.com/lojian/jvmgo/ch05/classpath"
+import "github.com/lojian/jvmgo/ch05/classfile"
+import "github.com/lojian/jvmgo/ch05/interpreter"
 
 func main() {
 	cmd := parseCmd()
@@ -15,23 +19,37 @@ func main() {
 }
 
 func startJVM(cmd *Cmd) {
-	frame := rtda.NewFrame(100, 100)
-	testLocalVars(frame.LocalVars())
-	testOperandStack(frame.OperandStack())
+	cp := classpath.Parse(cmd.xjreOption, cmd.cpOption)
+	className := strings.Replace(cmd.class, ".", "/", -1)
+	cf := loadClass(className, cp)
+	mainMethod := getMainMethod(cf)
+	if mainMethod != nil {
+		interpreter.Interpret(mainMethod)
+	} else {
+		fmt.Printf("Main method not found in class %s \n", cmd.class)
+	}
+
 }
 
-func testLocalVars(vars rtda.LocalVars) {
-	vars.SetInt(0, 100)
-	vars.SetInt(1, -100)
-	vars.SetLong(2, 2997924580)
-	vars.SetLong(4, -2997924580)
-	println(vars.GetInt(0))
-	println(vars.GetInt(1))
+func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {
+	classData, _, err := cp.ReadClass(className)
+	if err != nil {
+		panic(err)
+	}
+	cf, err := classfile.Parse(classData)
+	if err != nil {
+		panic(err)
+	}
+	return cf
 }
 
-func testOperandStack(ops *rtda.OperandStack) {
-	ops.PushInt(100)
-	ops.PushLong(2997924580)
-	println(ops.PopInt())
-	println(ops.PopLong())
+func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
+	for _, m := range cf.Methods() {
+		fmt.Printf("found method:%v,  %v\n", m.Name(), m.Descriptor())
+
+		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String;)V" {
+			return m
+		}
+	}
+	return nil
 }

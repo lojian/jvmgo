@@ -1,5 +1,7 @@
 package rtda
 
+import "fmt"
+
 type Stack struct {
 	maxSize uint
 	size    uint
@@ -39,4 +41,17 @@ func (self *Stack) top() *Frame {
 		panic("jvm stack is empty!")
 	}
 	return self._top
+}
+func (self *Stack) topN(n uint) *Frame {
+	if self.size < n {
+		panic(fmt.Sprintf("jvm stack size:%v n:%v", self.size, n))
+	}
+
+	frame := self._top
+	for n > 0 {
+		frame = frame.lower
+		n--
+	}
+
+	return frame
 }
