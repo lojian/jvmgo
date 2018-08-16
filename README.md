@@ -8,10 +8,12 @@ build is supported on Windows, Mac, and most popular Linux system.
 Java 1.7 or later is required.
 
 ```bash
-cd jvmgo
+git clone https://github.com/lojian/jvmgo.git
+cd jvmgo/jvmgo
 ./mvnw clean package
 ```
 The generate binary is located at bin/javago
+Note: first time execution will take some time to download GO SDK and Maven
 
 ## Java Testing Program
 Following Java program could be found under javaclasses directory
@@ -30,7 +32,7 @@ public class GaussTest {
 ## VM execution demo
 You need to setup JAVA_HOME
 ```
-$ bin/javago -Xjre $JAVA_HOME/jre "-cp" "jvmgo/javaclasses/build/classes/java/main" "GaussTest"
+$ bin/javago -Xjre $JAVA_HOME/jre -cp ~/jvmgo/jvmgo/javaclasses/build/classes/java/main GaussTest
 found method:<init>,  ()V
 found method:main,  ([Ljava/lang/String;)V
 pc:  0  inst: *constants.ICONST_0 &{{}}
