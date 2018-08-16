@@ -1,5 +1,6 @@
 
 ## Java Program
+```java
 public class GaussTest {
     public static void main(String[] args) {
         int sum = 0;
@@ -9,6 +10,7 @@ public class GaussTest {
         System.out.println(sum);
     }
 }
+```
 
 ## VM execution demo
 ```
