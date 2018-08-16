@@ -11,6 +11,7 @@ public class GaussTest {
 }
 
 ## VM execution demo
+```
 λ ch05 -Xjre "C:\\Program Files\\Java\\jdk1.8.0_121\\jre" "-cp" "C:\\tools\\gowork\\src\\github.com\\lojian\\jvmgo\\testclasses\\build\\classes\\java\\main" "GaussTest"
 found method:<init>,  ()V
 found method:main,  ([Ljava/lang/String;)V
@@ -923,5 +924,6 @@ pc:  5  inst: *constants.BIPUSH &{100}
 pc:  7  inst: *comparisons.IF_ICMPGT &{{13}}
 LocalVars: [{0 <nil>} {5050 <nil>} {101 <nil>}]
 OperandStack:&{0 [{101 <nil>} {100 <nil>}]}
+```
 
 you could see, the VM could calculate out 5050
